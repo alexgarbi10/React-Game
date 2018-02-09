@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { GameInfo, Board, Player, Enemy } from 'components';
+import { GameInfo, Board, Player, Enemy, Header } from 'components';
 
-import { UP, DOWN, LEFT, RIGHT, getSide } from 'helpers/utils';
+import { UP, DOWN, LEFT, RIGHT, EASY, MEDIUM, HARD, getElement } from 'helpers/utils';
 
 // Game attributes at start
 const getDefaultState = ({ boardSize, playerSize }) => {
@@ -21,7 +21,7 @@ const getDefaultState = ({ boardSize, playerSize }) => {
     },
     playerScore: 0,
     timeElapsed: 0,
-    enemySpeed: 5,
+    enemySpeed: 0,
     enemyIndex: 0,
     activeEnemies: 1,
     baseScore: 10
@@ -40,11 +40,12 @@ export default class Game extends Component {
     const { player, maxDim } = this.state.size;
     const { player: playerPos } = this.state.positions;
 
-    // Assign to a random side
-    const side = getSide([UP, DOWN, LEFT, RIGHT]);
+    // Assign to a random side and difficulty
+    const side = getElement([UP, DOWN, LEFT, RIGHT]);
+    const type = getElement([EASY, MEDIUM, HARD]);
 
     // Generate enemy object
-    const newEnemy = this.generateNewEnemy(playerPos, side);
+    const newEnemy = this.generateNewEnemy(playerPos, side, type);
 
     // Update game state
     this.setState({
@@ -55,13 +56,13 @@ export default class Game extends Component {
     });
   }
 
-  generateNewEnemy = (position, side) => {
+  generateNewEnemy = (position, side, type) => {
     // Update game state
     this.setState({
       enemyIndex: this.state.enemyIndex + 1
     });
 
-    const newEnemy = { key: this.state.enemyIndex, dir: side };
+    const newEnemy = { key: this.state.enemyIndex, dir: side, color: type.color, speed: type.speed };
     const { maxDim, player } = this.state.size;
 
     switch(side) {
@@ -135,7 +136,7 @@ export default class Game extends Component {
 
     // Check if player is still alive
     if (timeElapsed > 0) {
-      // Increment enemy speed
+      // Increment enemy speed every 3 seconds
       if (timeElapsed % 3 === 0) this.incrementEnemySpeed();
 
       // Increment enemies every 10 seconds
@@ -159,19 +160,22 @@ export default class Game extends Component {
             return enemy;
           }
 
+          // Calculate new speed based on inner and global speeds
+          let newSpeed = enemySpeed + enemy.speed;
+
           // Increment the speed based on direction (top / left)
           switch(enemy.dir) {
             case UP:
-              enemy.top -= enemySpeed;
+              enemy.top -= newSpeed;
               break;
             case DOWN:
-              enemy.top += enemySpeed;
+              enemy.top += newSpeed;
               break;
             case LEFT:
-              enemy.left -= enemySpeed;
+              enemy.left -= newSpeed;
               break;
             case RIGHT:
-              enemy.left += enemySpeed;
+              enemy.left += newSpeed;
               break;
           }
 
@@ -203,7 +207,7 @@ export default class Game extends Component {
 
     // Update game state
     this.setState({
-      enemySpeed: parseFloat((enemySpeed + 0.25).toFixed(2))
+      enemySpeed: parseFloat((enemySpeed + 0.1).toFixed(2))
     });
   }
 
@@ -249,6 +253,9 @@ export default class Game extends Component {
 
     return (
       <div style={this.style()}>
+
+        <Header />
+
         <GameInfo playerScore={playerScore} timeElapsed={timeElapsed} />
 
         <Board dimension={board * player}>
@@ -256,7 +263,14 @@ export default class Game extends Component {
 
           {
             this.state.positions.enemies.map(enemy =>
-              <Enemy key={enemy.key} size={player} info={enemy} playerPosition={playerPos} onCollide={this.handlePlayerCollision} />
+              <Enemy
+                key={enemy.key}
+                size={player}
+                info={enemy}
+                playerPosition={playerPos}
+                color={enemy.color}
+                speed={enemy.speed} 
+                onCollide={this.handlePlayerCollision} />
             )
           }
         </Board>

@@ -5,8 +5,6 @@ import { Game } from 'containers';
 
 const root = document.getElementById('root');
 
-render(
-    <Game boardSize={11} playerSize={25} />
-, root);
+render(<Game boardSize={20} playerSize={20} />, root);
 
 //registerServiceWorker();

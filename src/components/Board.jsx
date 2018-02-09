@@ -7,7 +7,7 @@ const style = (dimension) => {
     height: dim,
     border: '1px solid black',
     position: 'relative',
-    margin: '25px auto',
+    margin: '60px auto',
     overflow: 'hidden'
   };
 };

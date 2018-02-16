@@ -6,17 +6,17 @@ export const LEFT = 'LEFT';
 export const RIGHT = 'RIGHT';
 
 export const EASY = {
-	color: 'firebrick',
+	color: 'green',
 	speed: 2
 };
 
 export const MEDIUM = {
-	color: 'green',
+	color: 'darkgray',
 	speed: 4
 };
 
 export const HARD = {
-	color: 'black',
+	color: 'firebrick',
 	speed: 6
 };
 

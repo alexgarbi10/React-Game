@@ -14,26 +14,26 @@ const style = () => {
     player: {
       width: '20px',
       height: '20px',
-      backgroundColor: 'darkgrey',
+      backgroundColor: 'black',
       transition: 'all 0.1s ease'
     },
     enemies: {
       easy: {
         width: '20px',
         height: '20px',
-        backgroundColor: 'firebrick',
+        backgroundColor: 'green',
         transition: 'all 0.1s ease'
       },
       medium: {
         width: '20px',
         height: '20px',
-        backgroundColor: 'green',
+        backgroundColor: 'darkgrey',
         transition: 'all 0.1s ease'
       },
       hard: {
         width: '20px',
         height: '20px',
-        backgroundColor: 'black',
+        backgroundColor: 'firebrick',
         transition: 'all 0.1s ease'
       }
     },

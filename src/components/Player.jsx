@@ -34,7 +34,7 @@ class Player extends Component {
     const { size, position: { top, left }} = this.props;
     return (
       <div ref={ n => { this.player = n }} >
-        <Square size={size} position={{ top, left }} color='darkgray' />
+        <Square size={size} position={{ top, left }} color='black' />
       </div>
     );
   }
